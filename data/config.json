@@ -1,0 +1,6 @@
+{
+    "block": "pathAll = []\npathAll.append(r'path/to/fileA')\npathAll.append(r'path/to/fileB')\npathAll.append(r'path/to/fileC')",
+    "var": "pathAll",
+    "exePath": "C:/Python36/python.exe",
+    "scrPath": "E:/dev/qforquesadilla/wrap/test/testPrintValues.py"
+}
