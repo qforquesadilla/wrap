@@ -20,28 +20,27 @@ class Wrap(object):
         '''
 
         # variables
-        self.__block = ''
-        self.__var = ''
-        self.__exePath = ''
-        self.__scrPath = ''
+        self.__textBlock = ''
+        self.__variable = ''
+        self.__executablePath = ''
+        self.__scriptPath = ''
         self.target = []
 
         # config
-        self.__toolRootDir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-        self.__configPath = os.path.abspath(os.path.join(self.__toolRootDir,'data/config.json'))
+        self.__toolRootDir = os.path.normpath(os.path.join(os.path.dirname(__file__)))
+        self.__configPath = os.path.normpath(os.path.join(self.__toolRootDir, 'data/config.json'))
         if not self.__setupConfig():
             return
 
-        # ui
+        # ui & commands
         self.__buildUi()
         self.__mainUi.show()
 
-        self.__mainUi.block_txt.setText(self.__block)
-        self.__mainUi.var_le.setText(self.__var)
-        self.__mainUi.exe_le.setText(self.__exePath)
-        self.__mainUi.scr_le.setText(self.__scrPath)
+        self.__mainUi.block_txt.setText(self.__textBlock)
+        self.__mainUi.var_le.setText(self.__variable)
+        self.__mainUi.exe_le.setText(self.__executablePath)
+        self.__mainUi.scr_le.setText(self.__scriptPath)
 
-        # commands
         self.__linkCommands()
 
         print('\n\n########\n# WRAP #\n########\n')
@@ -55,17 +54,17 @@ class Wrap(object):
         # load config
         try:
             with open(self.__configPath) as c:
-                self.__configData = json.load(c)
+                configData = json.load(c)
         except Exception as err:
-            print("Failed to load config: {}".format(self.__configPath))
+            print('Failed to load config: {}'.format(self.__configPath))
             print(str(err))
             return False
         
-        # apply test setting (TEMPORARY!)
-        self.__block = self.__configData.get("block", None)
-        self.__var = self.__configData.get("var", None)
-        self.__exePath = self.__configData.get("exePath", None)
-        self.__scrPath = self.__configData.get("scrPath", None)
+        # apply test setting (TEMPORARY! DEMO!)
+        self.__textBlock = configData.get('textBlock', None)
+        self.__variable = configData.get('variable', None)
+        self.__executablePath = configData.get('executablePath', None)
+        self.__scriptPath = configData.get('scriptPath', None)
 
         return True
 
@@ -76,8 +75,8 @@ class Wrap(object):
 
         # define ui file paths
         self.__app = QApplication(sys.argv)
-        mainUiPath = os.path.abspath(os.path.join(self.__toolRootDir,'interface/main.ui')).replace('\\', '/')
-        previewUiPath = os.path.abspath(os.path.join(self.__toolRootDir,'interface/preview.ui')).replace('\\', '/')
+        mainUiPath = os.path.normpath(os.path.join(self.__toolRootDir, 'interface/main.ui')).replace('\\', '/')
+        previewUiPath = os.path.normpath(os.path.join(self.__toolRootDir, 'interface/preview.ui')).replace('\\', '/')
 
         # open ui files
         loader = QUiLoader()
@@ -110,12 +109,12 @@ class Wrap(object):
         '''
         '''
 
-        self.__var = self.__mainUi.var_le.text()
-        self.__block = self.__mainUi.block_txt.toPlainText()
+        self.__variable = self.__mainUi.var_le.text()
+        self.__textBlock = self.__mainUi.block_txt.toPlainText()
 
         # run block
         try:
-            exec(self.__block)
+            exec(self.__textBlock)
         except Exception as err:
             print('Failed to run process')
             print(str(err))
@@ -123,7 +122,7 @@ class Wrap(object):
 
         # set value to self.target
         try:
-            exec('self.target = {}'.format(self.__var))
+            exec('self.target = {}'.format(self.__variable))
         except Exception as err:
             print('Failed to get targets')
             print(str(err))
@@ -163,14 +162,14 @@ class Wrap(object):
         self.__setTarget()
 
         if self.target == []:
-            print("No target to process")
+            print('No target to process')
             return
 
         # set paths
-        self.__exePath = self.__mainUi.exe_le.text().replace("\\", "/")
-        self.__scrPath = self.__mainUi.scr_le.text().replace("\\", "/")
+        self.__executablePath = self.__mainUi.exe_le.text().replace('\\', '/')
+        self.__scriptPath = self.__mainUi.scr_le.text().replace('\\', '/')
 
-        for path in [self.__exePath, self.__scrPath]:
+        for path in [self.__executablePath, self.__scriptPath]:
             if not os.path.exists(path):
                 print('Not found: {}'.format(path))
                 return
@@ -211,8 +210,8 @@ class Wrap(object):
         \n    print("="*150)'''
         self.__cmd = self.__cmdTmp.format(
                                     TARGET=self.target,
-                                    EXE=self.__exePath,
-                                    WRAPPER=self.__scrPath)
+                                    EXE=self.__executablePath,
+                                    WRAPPER=self.__scriptPath)
                                     #ARG='ahoy')
 
         targetStr = '\n'.join(self.target)
