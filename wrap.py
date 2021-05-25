@@ -36,10 +36,10 @@ class Wrap(object):
         self.__buildUi()
         self.__mainUi.show()
 
-        self.__mainUi.block_txt.setText(self.__textBlock)
-        self.__mainUi.var_le.setText(self.__variable)
-        self.__mainUi.exe_le.setText(self.__executablePath)
-        self.__mainUi.scr_le.setText(self.__scriptPath)
+        self.__mainUi.textBlockTE.setText(self.__textBlock)
+        self.__mainUi.testLE.setText(self.__variable)
+        self.__mainUi.executableLE.setText(self.__executablePath)
+        self.__mainUi.scriptLE.setText(self.__scriptPath)
 
         self.__linkCommands()
 
@@ -95,22 +95,22 @@ class Wrap(object):
         '''
 
         # main ui
-        self.__mainUi.test_pbt.clicked.connect(self.__setTarget)
-        self.__mainUi.exe_tbt.clicked.connect(partial(self.__setPath, 'exe'))
-        self.__mainUi.scr_tbt.clicked.connect(partial(self.__setPath, 'scr'))
-        self.__mainUi.finalize_pbt.clicked.connect(self.__finalize)
+        self.__mainUi.testPB.clicked.connect(self.__setTarget)
+        self.__mainUi.executableTB.clicked.connect(partial(self.__setPath, 'exe'))
+        self.__mainUi.scriptTB.clicked.connect(partial(self.__setPath, 'scr'))
+        self.__mainUi.finalizePB.clicked.connect(self.__finalize)
 
         # preview ui
-        self.__previewUi.run_pbt.clicked.connect(partial(self.__runCmd, True))
-        self.__previewUi.ccl_pbt.clicked.connect(partial(self.__runCmd, False))
+        self.__previewUi.runPB.clicked.connect(partial(self.__runCmd, True))
+        self.__previewUi.cancelPB.clicked.connect(partial(self.__runCmd, False))
 
 
     def __setTarget(self):
         '''
         '''
 
-        self.__variable = self.__mainUi.var_le.text()
-        self.__textBlock = self.__mainUi.block_txt.toPlainText()
+        self.__variable = self.__mainUi.testLE.text()
+        self.__textBlock = self.__mainUi.textBlockTE.toPlainText()
 
         # run block
         try:
@@ -139,10 +139,10 @@ class Wrap(object):
 
         if mode == 'exe':
             fileFlt = 'Executable (*.exe)'
-            lineEdit = self.__mainUi.exe_le
+            lineEdit = self.__mainUi.executableLE
         else:
             fileFlt = 'Python Script (*.py)'
-            lineEdit = self.__mainUi.scr_le
+            lineEdit = self.__mainUi.scriptLE
             
         path, flt = QFileDialog.getOpenFileName(caption='File Selection',
                                                 dir='.',
@@ -166,8 +166,8 @@ class Wrap(object):
             return
 
         # set paths
-        self.__executablePath = self.__mainUi.exe_le.text().replace('\\', '/')
-        self.__scriptPath = self.__mainUi.scr_le.text().replace('\\', '/')
+        self.__executablePath = self.__mainUi.executableLE.text().replace('\\', '/')
+        self.__scriptPath = self.__mainUi.scriptLE.text().replace('\\', '/')
 
         for path in [self.__executablePath, self.__scriptPath]:
             if not os.path.exists(path):
@@ -217,8 +217,8 @@ class Wrap(object):
         targetStr = '\n'.join(self.target)
 
         self.__previewUi.show()
-        self.__previewUi.tgt_txt.setText(targetStr)
-        self.__previewUi.cmd_txt.setText(self.__cmd)
+        self.__previewUi.targetTE.setText(targetStr)
+        self.__previewUi.commandTE.setText(self.__cmd)
 
 
     def __runCmd(self, run=False):
@@ -230,7 +230,7 @@ class Wrap(object):
             print('\nCanceled')
             return
 
-        self.__cmd = self.__previewUi.cmd_txt.toPlainText()
+        self.__cmd = self.__previewUi.commandTE.toPlainText()
 
         try:
             exec(self.__cmd)

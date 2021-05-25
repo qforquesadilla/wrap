@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>preview_form</class>
- <widget class="QWidget" name="preview_form">
+ <class>previewW</class>
+ <widget class="QWidget" name="previewW">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -34,7 +34,7 @@ color: #FFFFFF;</string>
     <number>7</number>
    </property>
    <item>
-    <widget class="QLabel" name="tgt_lbl">
+    <widget class="QLabel" name="targetL">
      <property name="layoutDirection">
       <enum>Qt::RightToLeft</enum>
      </property>
@@ -47,7 +47,7 @@ color: #FFFFFF;</string>
     </widget>
    </item>
    <item>
-    <widget class="QTextEdit" name="tgt_txt">
+    <widget class="QTextEdit" name="targetTE">
      <property name="styleSheet">
       <string notr="true">background-color: #202222; color: #FFFFFF; selection-background-color: #D7E646; selection-color: #313333</string>
      </property>
@@ -73,7 +73,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="cmd_lbl">
+    <widget class="QLabel" name="commandL">
      <property name="layoutDirection">
       <enum>Qt::RightToLeft</enum>
      </property>
@@ -86,7 +86,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item>
-    <widget class="QTextEdit" name="cmd_txt">
+    <widget class="QTextEdit" name="commandTE">
      <property name="styleSheet">
       <string notr="true">background-color: #202222; color: #FFFFFF; selection-background-color: #D7E646; selection-color: #313333</string>
      </property>
@@ -112,7 +112,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item>
-    <widget class="Line" name="lower_sep">
+    <widget class="Line" name="buttonsSP">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -125,9 +125,9 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="buttonsQHL">
      <item>
-      <widget class="QLabel" name="preview_lbl">
+      <widget class="QLabel" name="buttonsL">
        <property name="minimumSize">
         <size>
          <width>60</width>
@@ -149,7 +149,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ccl_pbt">
+      <widget class="QPushButton" name="cancelPB">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -189,7 +189,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="run_pbt">
+      <widget class="QPushButton" name="runPB">
        <property name="enabled">
         <bool>true</bool>
        </property>
