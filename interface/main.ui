@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>main_form</class>
- <widget class="QWidget" name="main_form">
+ <class>mainW</class>
+ <widget class="QWidget" name="mainW">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -37,12 +37,12 @@ color: #FFFFFF;</string>
     <number>7</number>
    </property>
    <item>
-    <layout class="QVBoxLayout" name="tgt_box">
+    <layout class="QVBoxLayout" name="targetVBL">
      <property name="spacing">
       <number>4</number>
      </property>
      <item>
-      <widget class="QTextEdit" name="block_txt">
+      <widget class="QTextEdit" name="textBlockTE">
        <property name="styleSheet">
         <string notr="true">background-color: #202222; color: #FFFFFF; selection-background-color: #D7E646; selection-color: #313333</string>
        </property>
@@ -68,7 +68,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="tgtSub_box" stretch="0,0,0">
+      <layout class="QHBoxLayout" name="targetHBL" stretch="0,0,0">
        <property name="spacing">
         <number>8</number>
        </property>
@@ -76,7 +76,7 @@ p, li { white-space: pre-wrap; }
         <number>4</number>
        </property>
        <item>
-        <widget class="QLabel" name="var_lbl">
+        <widget class="QLabel" name="testL">
          <property name="layoutDirection">
           <enum>Qt::RightToLeft</enum>
          </property>
@@ -89,7 +89,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="var_le">
+        <widget class="QLineEdit" name="testLE">
          <property name="styleSheet">
           <string notr="true">background-color: #202222; color: #FFFFFF; selection-background-color: #D7E646; selection-color: #313333</string>
          </property>
@@ -102,7 +102,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="test_pbt">
+        <widget class="QPushButton" name="testPB">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -146,7 +146,7 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
    <item>
-    <widget class="Line" name="upper_sep">
+    <widget class="Line" name="targetSP">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -159,12 +159,12 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="exe_box">
+    <layout class="QHBoxLayout" name="executableHBL">
      <property name="spacing">
       <number>6</number>
      </property>
      <item>
-      <widget class="QLabel" name="exe_lbl">
+      <widget class="QLabel" name="executableL">
        <property name="minimumSize">
         <size>
          <width>60</width>
@@ -183,7 +183,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="exe_le">
+      <widget class="QLineEdit" name="executableLE">
        <property name="styleSheet">
         <string notr="true">background-color: #202222; color: #FFFFFF; selection-background-color: #D7E646; selection-color: #313333</string>
        </property>
@@ -196,7 +196,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="exe_tbt">
+      <widget class="QToolButton" name="executableTB">
        <property name="styleSheet">
         <string notr="true">background-color: #AEBA33; color: #313333</string>
        </property>
@@ -208,9 +208,9 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="scr_box" stretch="0,0,0">
+    <layout class="QHBoxLayout" name="scriptHBL" stretch="0,0,0">
      <item>
-      <widget class="QLabel" name="scr_lbl">
+      <widget class="QLabel" name="scriptL">
        <property name="minimumSize">
         <size>
          <width>60</width>
@@ -229,7 +229,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="scr_le">
+      <widget class="QLineEdit" name="scriptLE">
        <property name="styleSheet">
         <string notr="true">background-color: #202222; color: #FFFFFF; selection-background-color: #D7E646; selection-color: #313333</string>
        </property>
@@ -242,7 +242,7 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="scr_tbt">
+      <widget class="QToolButton" name="scriptTB">
        <property name="styleSheet">
         <string notr="true">background-color: #AEBA33; color: #313333</string>
        </property>
@@ -254,7 +254,7 @@ p, li { white-space: pre-wrap; }
     </layout>
    </item>
    <item>
-    <widget class="Line" name="mid_sep">
+    <widget class="Line" name="finalizeSP">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -267,62 +267,106 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="finalize_pbt">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: #D7E646; color: #313333</string>
-     </property>
-     <property name="text">
-      <string>Finalize</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>16</width>
-       <height>16</height>
-      </size>
-     </property>
-     <property name="default">
-      <bool>false</bool>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="Line" name="lower_sep">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>3</height>
-      </size>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="lower_box" stretch="0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <spacer name="sep_L">
+      <widget class="QPushButton" name="demoPB">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #AEBA33; color: #313333</string>
+       </property>
+       <property name="text">
+        <string>Demo</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="finalizePB">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: #D7E646; color: #313333</string>
+       </property>
+       <property name="text">
+        <string>Finalize</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Line" name="copyrightSP">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>3</height>
+      </size>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="copyrightHBL" stretch="0,0,0">
+     <item>
+      <spacer name="copyrightS_L">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -335,7 +379,7 @@ p, li { white-space: pre-wrap; }
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="copyright_lbl">
+      <widget class="QLabel" name="copyrightL">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -357,12 +401,12 @@ p, li { white-space: pre-wrap; }
         <string notr="true">color: #a6a6a6;</string>
        </property>
        <property name="text">
-        <string>© 2021 Q for Quesadilla All Rights Reserved</string>
+        <string>© 2021 Q for Quesadilla. All Rights Reserved.</string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="sep_R">
+      <spacer name="copyrightS_R">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

@@ -20,64 +20,63 @@ class Wrap(object):
         '''
 
         # variables
-        self.block = ''
-        self.var = ''
-        self.exePath = ''
-        self.scrPath = ''
+        self.__textBlock = ''
+        self.__variable = ''
+        self.__executablePath = ''
+        self.__scriptPath = ''
         self.target = []
 
         # config
-        self.toolRootDir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-        self.configPath = os.path.abspath(os.path.join(self.toolRootDir,'data/config.json'))
-        if not self.setupConfig():
+        self.__toolRootDir = os.path.normpath(os.path.join(os.path.dirname(__file__)))
+        self.__configPath = os.path.normpath(os.path.join(self.__toolRootDir, 'data/config.json'))
+        if not self.__setupConfig():
             return
 
-        # ui
-        self.ui()
-        self.mainUi.show()
+        # ui & commands
+        self.__buildUi()
+        self.__mainUi.show()
 
-        self.mainUi.block_txt.setText(self.block)
-        self.mainUi.var_le.setText(self.var)
-        self.mainUi.exe_le.setText(self.exePath)
-        self.mainUi.scr_le.setText(self.scrPath)
+        self.__mainUi.textBlockTE.setText(self.__textBlock)
+        self.__mainUi.testLE.setText(self.__variable)
+        self.__mainUi.executableLE.setText(self.__executablePath)
+        self.__mainUi.scriptLE.setText(self.__scriptPath)
 
-        # commands
-        self.linkCommands()
+        self.__linkCommands()
 
         print('\n\n########\n# WRAP #\n########\n')
-        sys.exit(self.app.exec_())
+        sys.exit(self.__app.exec_())
 
 
-    def setupConfig(self):
+    def __setupConfig(self):
         '''
         '''
 
         # load config
         try:
-            with open(self.configPath) as c:
-                self.configData = json.load(c)
+            with open(self.__configPath) as c:
+                configData = json.load(c)
         except Exception as err:
-            print("Failed to load config: {}".format(self.configPath))
+            print('Failed to load config: {}'.format(self.__configPath))
             print(str(err))
             return False
         
-        # apply test setting (TEMPORARY!)
-        self.block = self.configData.get("block", None)
-        self.var = self.configData.get("var", None)
-        self.exePath = self.configData.get("exePath", None)
-        self.scrPath = self.configData.get("scrPath", None)
+        # apply test setting (TEMPORARY! DEMO!)
+        self.__textBlock = configData.get('textBlock', None)
+        self.__variable = configData.get('variable', None)
+        self.__executablePath = configData.get('executablePath', None)
+        self.__scriptPath = configData.get('scriptPath', None)
 
         return True
 
 
-    def ui(self):
+    def __buildUi(self):
         '''
         '''
 
         # define ui file paths
-        self.app = QApplication(sys.argv)
-        mainUiPath = os.path.abspath(os.path.join(self.toolRootDir,'interface/main.ui')).replace('\\', '/')
-        previewUiPath = os.path.abspath(os.path.join(self.toolRootDir,'interface/preview.ui')).replace('\\', '/')
+        self.__app = QApplication(sys.argv)
+        mainUiPath = os.path.normpath(os.path.join(self.__toolRootDir, 'interface/main.ui')).replace('\\', '/')
+        previewUiPath = os.path.normpath(os.path.join(self.__toolRootDir, 'interface/preview.ui')).replace('\\', '/')
 
         # open ui files
         loader = QUiLoader()
@@ -87,35 +86,35 @@ class Wrap(object):
         previewUiFile.open(QFile.ReadOnly)
 
         # create ui objects
-        self.mainUi = loader.load(mainUiFile)
-        self.previewUi = loader.load(previewUiFile)
+        self.__mainUi = loader.load(mainUiFile)
+        self.__previewUi = loader.load(previewUiFile)
 
 
-    def linkCommands(self):
+    def __linkCommands(self):
         '''
         '''
 
         # main ui
-        self.mainUi.test_pbt.clicked.connect(self.setTarget)
-        self.mainUi.exe_tbt.clicked.connect(partial(self.setPath, 'exe'))
-        self.mainUi.scr_tbt.clicked.connect(partial(self.setPath, 'scr'))
-        self.mainUi.finalize_pbt.clicked.connect(self.finalize)
+        self.__mainUi.testPB.clicked.connect(self.__setTarget)
+        self.__mainUi.executableTB.clicked.connect(partial(self.__setPath, 'exe'))
+        self.__mainUi.scriptTB.clicked.connect(partial(self.__setPath, 'scr'))
+        self.__mainUi.finalizePB.clicked.connect(self.__finalize)
 
         # preview ui
-        self.previewUi.run_pbt.clicked.connect(partial(self.runCmd, True))
-        self.previewUi.ccl_pbt.clicked.connect(partial(self.runCmd, False))
+        self.__previewUi.runPB.clicked.connect(partial(self.__runCmd, True))
+        self.__previewUi.cancelPB.clicked.connect(partial(self.__runCmd, False))
 
 
-    def setTarget(self):
+    def __setTarget(self):
         '''
         '''
 
-        self.var = self.mainUi.var_le.text()
-        self.block = self.mainUi.block_txt.toPlainText()
+        self.__variable = self.__mainUi.testLE.text()
+        self.__textBlock = self.__mainUi.textBlockTE.toPlainText()
 
         # run block
         try:
-            exec(self.block)
+            exec(self.__textBlock)
         except Exception as err:
             print('Failed to run process')
             print(str(err))
@@ -123,7 +122,7 @@ class Wrap(object):
 
         # set value to self.target
         try:
-            exec('self.target = {}'.format(self.var))
+            exec('self.target = {}'.format(self.__variable))
         except Exception as err:
             print('Failed to get targets')
             print(str(err))
@@ -134,16 +133,16 @@ class Wrap(object):
             print(tgt)
 
 
-    def setPath(self, mode = None):
+    def __setPath(self, mode = None):
         '''
         '''
 
         if mode == 'exe':
             fileFlt = 'Executable (*.exe)'
-            lineEdit = self.mainUi.exe_le
+            lineEdit = self.__mainUi.executableLE
         else:
             fileFlt = 'Python Script (*.py)'
-            lineEdit = self.mainUi.scr_le
+            lineEdit = self.__mainUi.scriptLE
             
         path, flt = QFileDialog.getOpenFileName(caption='File Selection',
                                                 dir='.',
@@ -155,28 +154,28 @@ class Wrap(object):
         lineEdit.setText(path)
 
 
-    def finalize(self):
+    def __finalize(self):
         '''
         '''
 
         # confirm target items
-        self.setTarget()
+        self.__setTarget()
 
         if self.target == []:
-            print("No target to process")
+            print('No target to process')
             return
 
         # set paths
-        self.exePath = self.mainUi.exe_le.text().replace("\\", "/")
-        self.scrPath = self.mainUi.scr_le.text().replace("\\", "/")
+        self.__executablePath = self.__mainUi.executableLE.text().replace('\\', '/')
+        self.__scriptPath = self.__mainUi.scriptLE.text().replace('\\', '/')
 
-        for path in [self.exePath, self.scrPath]:
+        for path in [self.__executablePath, self.__scriptPath]:
             if not os.path.exists(path):
                 print('Not found: {}'.format(path))
                 return
 
         # construct codes
-        self.cmd_tmp = '''target = {TARGET}\
+        self.__cmdTmp = '''target = {TARGET}\
         \n\
         \ntotal = len(target)\
         \nfor counter, tgt in enumerate(target, 1):\
@@ -209,32 +208,32 @@ class Wrap(object):
         \n            print(msg)\
         \n    \
         \n    print("="*150)'''
-        self.cmd = self.cmd_tmp.format(
+        self.__cmd = self.__cmdTmp.format(
                                     TARGET=self.target,
-                                    EXE=self.exePath,
-                                    WRAPPER=self.scrPath)
-                                    #ARG="ahoy")
+                                    EXE=self.__executablePath,
+                                    WRAPPER=self.__scriptPath)
+                                    #ARG='ahoy')
 
         targetStr = '\n'.join(self.target)
 
-        self.previewUi.show()
-        self.previewUi.tgt_txt.setText(targetStr)
-        self.previewUi.cmd_txt.setText(self.cmd)
+        self.__previewUi.show()
+        self.__previewUi.targetTE.setText(targetStr)
+        self.__previewUi.commandTE.setText(self.__cmd)
 
 
-    def runCmd(self, run=False):
+    def __runCmd(self, run=False):
         '''
         '''
 
         if not run:
-            self.previewUi.close()
+            self.__previewUi.close()
             print('\nCanceled')
             return
 
-        self.cmd = self.previewUi.cmd_txt.toPlainText()
+        self.__cmd = self.__previewUi.commandTE.toPlainText()
 
         try:
-            exec(self.cmd)
+            exec(self.__cmd)
         except Exception as err:
             print('Failed to run process')
             print(str(err))
