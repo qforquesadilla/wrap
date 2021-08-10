@@ -1,2 +1,2 @@
 # wrap
-A Subprocess Executor
+Batch Process Runner
