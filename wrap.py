@@ -17,6 +17,7 @@ class Wrap(object):
 
     def __init__(self):
         '''
+        TBA
         '''
 
         # variables
@@ -24,13 +25,12 @@ class Wrap(object):
         self.__variable = ''
         self.__executablePath = ''
         self.__scriptPath = ''
-        self.target = []
+        self.targets = []
 
         # config
-        self.__toolRootDir = os.path.normpath(os.path.join(os.path.dirname(__file__)))
+        self.__toolRootDir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
         self.__configPath = os.path.normpath(os.path.join(self.__toolRootDir, 'data/config.json'))
-        if not self.__setupConfig():
-            return
+        self.__setupConfig()
 
         # ui & commands
         self.__buildUi()
@@ -49,16 +49,12 @@ class Wrap(object):
 
     def __setupConfig(self):
         '''
+        TBA
         '''
 
-        # load config
-        try:
-            with open(self.__configPath) as c:
-                configData = json.load(c)
-        except Exception as err:
-            print('Failed to load config: {}'.format(self.__configPath))
-            print(str(err))
-            return False
+        # load json
+        with open(self.__configPath) as c:
+            configData = json.load(c)
         
         # apply test setting (TEMPORARY! DEMO!)
         self.__textBlock = configData.get('textBlock', None)
@@ -66,11 +62,10 @@ class Wrap(object):
         self.__executablePath = configData.get('executablePath', None)
         self.__scriptPath = configData.get('scriptPath', None)
 
-        return True
-
 
     def __buildUi(self):
         '''
+        TBA
         '''
 
         # define ui file paths
@@ -92,25 +87,28 @@ class Wrap(object):
 
     def __linkCommands(self):
         '''
+        TBA
         '''
 
         # main ui
-        self.__mainUi.testPB.clicked.connect(self.__setTarget)
-        self.__mainUi.executableTB.clicked.connect(partial(self.__setPath, 'exe'))
-        self.__mainUi.scriptTB.clicked.connect(partial(self.__setPath, 'scr'))
-        self.__mainUi.finalizePB.clicked.connect(self.__finalize)
+        self.__mainUi.testPB.clicked.connect(self.__onTestPressed)
+        self.__mainUi.executableTB.clicked.connect(partial(self.__onSetPath, 'exe'))
+        self.__mainUi.scriptTB.clicked.connect(partial(self.__onSetPath, 'scr'))
+        self.__mainUi.finalizePB.clicked.connect(self.__onFinalizePressed)
+        self.__mainUi.demoPB.clicked.connect(self.__onDemoPressed)
 
         # preview ui
-        self.__previewUi.runPB.clicked.connect(partial(self.__runCmd, True))
-        self.__previewUi.cancelPB.clicked.connect(partial(self.__runCmd, False))
+        self.__previewUi.runPB.clicked.connect(partial(self.__onRunPressed, True))
+        self.__previewUi.cancelPB.clicked.connect(partial(self.__onRunPressed, False))
 
 
-    def __setTarget(self):
+    def __onTestPressed(self):
         '''
+        TBA
         '''
 
-        self.__variable = self.__mainUi.testLE.text()
-        self.__textBlock = self.__mainUi.textBlockTE.toPlainText()
+        self.__variable = self.__getLineEdit(self.__mainUi.testLE)
+        self.__textBlock = self.__getTextEdit(self.__mainUi.textBlockTE)
 
         # run block
         try:
@@ -120,21 +118,22 @@ class Wrap(object):
             print(str(err))
             return
 
-        # set value to self.target
+        # set value to self.targets
         try:
-            exec('self.target = {}'.format(self.__variable))
+            exec('self.targets = {}'.format(self.__variable))
         except Exception as err:
             print('Failed to get targets')
             print(str(err))
             return
 
         print('\nTarget:')
-        for tgt in self.target:
+        for tgt in self.targets:
             print(tgt)
 
 
-    def __setPath(self, mode = None):
+    def __onSetPath(self, mode = None):
         '''
+        TBA
         '''
 
         if mode == 'exe':
@@ -154,20 +153,30 @@ class Wrap(object):
         lineEdit.setText(path)
 
 
-    def __finalize(self):
+
+    def __onDemoPressed(self):
         '''
+        TBA
+        '''
+
+        print('ahoy')
+
+
+    def __onFinalizePressed(self):
+        '''
+        TBA
         '''
 
         # confirm target items
-        self.__setTarget()
+        self.__onTestPressed()
 
-        if self.target == []:
+        if self.targets == []:
             print('No target to process')
             return
 
         # set paths
-        self.__executablePath = self.__mainUi.executableLE.text().replace('\\', '/')
-        self.__scriptPath = self.__mainUi.scriptLE.text().replace('\\', '/')
+        self.__executablePath = self.__getLineEdit(self.__mainUi.executableLE).replace('\\', '/')
+        self.__scriptPath = self.__getLineEdit(self.__mainUi.scriptLE).replace('\\', '/')
 
         for path in [self.__executablePath, self.__scriptPath]:
             if not os.path.exists(path):
@@ -175,19 +184,19 @@ class Wrap(object):
                 return
 
         # construct codes
-        self.__cmdTmp = '''target = {TARGET}\
+        self.__cmdTmp = '''targets = {TARGET}\
         \n\
-        \ntotal = len(target)\
-        \nfor counter, tgt in enumerate(target, 1):\
+        \ntotal = len(targets)\
+        \nfor counter, target in enumerate(targets, 1):\
         \n    \
         \n    print("\\n\\n# %s out of %s #" % (counter, total))\
-        \n    print("Target: %s" % tgt)\
+        \n    print("Target: %s" % target)\
         \n    \
         \n    # create subprocess command\
         \n    cmd_lst = []\
         \n    cmd_lst.append("{EXE}")\
         \n    cmd_lst.append("{WRAPPER}")\
-        \n    cmd_lst.append(tgt)\
+        \n    cmd_lst.append(target)\
         \n    cmd_lst.append("stdin = subprocess.PIPE")\
         \n    cmd_lst.append("stdout = subprocess.PIPE")\
         \n    cmd_lst.append("stderr = subprocess.PIPE")\
@@ -209,20 +218,21 @@ class Wrap(object):
         \n    \
         \n    print("="*150)'''
         self.__cmd = self.__cmdTmp.format(
-                                    TARGET=self.target,
+                                    TARGET=self.targets,
                                     EXE=self.__executablePath,
                                     WRAPPER=self.__scriptPath)
                                     #ARG='ahoy')
 
-        targetStr = '\n'.join(self.target)
+        targetStr = '\n'.join(self.targets)
 
         self.__previewUi.show()
         self.__previewUi.targetTE.setText(targetStr)
         self.__previewUi.commandTE.setText(self.__cmd)
 
 
-    def __runCmd(self, run=False):
+    def __onRunPressed(self, run=False):
         '''
+        TBA
         '''
 
         if not run:
@@ -230,7 +240,7 @@ class Wrap(object):
             print('\nCanceled')
             return
 
-        self.__cmd = self.__previewUi.commandTE.toPlainText()
+        self.__cmd = self.__getTextEdit(self.__previewUi.commandTE)
 
         try:
             exec(self.__cmd)
@@ -240,17 +250,30 @@ class Wrap(object):
             return
 
 
-if __name__ == "__main__":
+    ########
+    # MISC #
+    ########
+
+
+    def __getLineEdit(self, qLineEdit):
+        '''
+        TBA
+        '''
+
+        return qLineEdit.text()
+
+
+    def __getTextEdit(self, qTextEdit):
+        '''
+        TBA
+        '''
+
+        return qTextEdit.toPlainText()
+
+
+if __name__ == '__main__':
     Wrap()
 
 
-
-
-
-
-
-
-
-
-# maintain selection
-# kill all if parent ui dies
+# TODO: maintain selection
+# TODO: all if parent ui dies
